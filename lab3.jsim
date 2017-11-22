@@ -1,0 +1,72 @@
+.include "C:/Users/Owner/Downloads/50002/nominal.jsim"
+.include "C:/Users/Owner/Downloads/50002/stdcell.jsim"
+.include "C:/Users/Owner/Downloads/50002/lab3checkoff_6.jsim"
+
+.subckt FA a b cin cout s
+Xid a b out1 xor2
+Xid2 out1 cin s xor2
+Xid3 a b out2 and2
+Xid4 out1 cin out3 and2
+Xid5 out2 out3 cout or2
+.ends
+
+.subckt adder32 ALUFN[0] A[31:0] B[31:0] s[31:0] z v n
+Xidz1 s[31:16] s[15:0] Z2[15:0] nor2
+Xidz2 Z2[15:12] Z2[11:8] Z2[7:4] Z2[3:0] Z3[3:0] and4
+Xidz3 Z3[3] Z3[2] Z3[1] Z3[0] z and4 
+
+Xid1 B[31:0] ALUFN[0]#32 Bnew[31:0] xor2
+
+Xidv1 s[31] sprime inverter
+Xidv2 A[31] Bnew[31] sprime term1 and3
+Xidv3 A[31] Bnew[31] AB2 nor2
+Xidv4 AB2 s[31] term2 and2
+Xidv5 term1 term2 v or2
+
+Xidn s[31] n buffer
+
+Xid2 A[0] Bnew[0] ALUFN[0] C[1] s[0] FA
+Xid3 A[30:1] Bnew[30:1] C[30:1] C[31:2] s[30:1] FA
+Xid4 A[31] Bnew[31] C[31] lastcarry s[31] FA
+.ends
+
+.subckt compare32 ALUFN[2:1] z v n cmp[31:0]
+Xid1 cmp[31:1] constant0 
+Xid2 n v nxorv xor2 
+Xid3 nxorv z zornxorv or2
+Xid4 ALUFN[1] ALUFN[2] 0 z nxorv zornxorv cmp0 mux4
+.ends
+
+.subckt boole32 ALUFN[3:0] A[31:0] B[31:0] boole[31:0]
+Xid4 A[31:0] B[31:0] ALUFN0#32 ALUFN1#32 ALUFN2#32 ALUFN3#32 boole[31:0] mux4
+.ends
+
+.subckt shift32 ALUFN[1:0] A[31:0] B[4:0] shift[31:0]
+Xleftshift16 B4#32 A[31:0] A[15:0] 0#16 LSH1[31:0] mux2
+Xleftshift8 B3#32 LSH1[31:0] LSH1[23:0] 0#8 LSH2[31:0] mux2
+Xleftshift4 B2#32 LSH2[31:0] LSH2[27:0] 0#4 LSH3[31:0] mux2
+Xleftshift2 B1#32 LSH3[31:0] LSH3[29:0] 0#2 LSH4[31:0] mux2
+Xleftshift1 B0#32 LSH4[31:0] LSH4[30:0] 0 leftshift[31:0] mux2
+
+Xrightshift16 B4#32 A[31:0] 0#16 A[31:16] RSH1[31:0] mux2
+Xrightshift8 B3#32 RSH1[31:0] 0#8 RSH1[31:8] RSH2[31:0] mux2
+Xrightshift4 B2#32 RSH2[31:0] 0#4 RSH2[31:4] RSH3[31:0] mux2
+Xrightshift2 B1#32 RSH3[31:0] 0#2 RSH3[31:2] RSH4[31:0] mux2
+Xrightshift1 B0#32 RSH4[31:0] 0 RSH4[31:1] rightshift[31:0] mux2
+
+Xrightshifta16 B4#32 A[31:0] A[31]#16 A[31:16] RSA1[31:0] mux2
+Xrightshifta8 B3#32 RSA1[31:0] RSA1[31]#8 RSA1[31:8] RSA2[31:0] mux2
+Xrightshifta4 B2#32 RSA2[31:0] RSA2[31]#4 RSA2[31:4] RSA3[31:0] mux2
+Xrightshifta2 B1#32 RSA3[31:0] RSA3[31]#2 RSA3[31:2] RSA4[31:0] mux2
+Xrightshifta1 B0#32 RSA4[31:0] RSA4[31] RSA4[31:1] rightshifta[31:0] mux2
+
+Xchoose4 ALUFN1#32 ALUFN0#32 leftshift[31:0] 0#32 rightshift[31:0]  rightshifta[31:0] shift[31:0] mux4
+.ends
+
+.subckt alu ALUFN[5:0] A[31:0] B[31:0] alu[31:0] z v n
+Xadder32 ALUFN[0] A[31:0] B[31:0] s[31:0] z v n adder32
+Xboole32 ALUFN[3:0] A[31:0] B[31:0] boole[31:0] boole32
+Xcompare32 ALUFN[2:1] z v n cmp[31:0] compare32
+Xshift32 ALUFN[1:0] A[31:0] B[4:0] shift[31:0] shift32
+Xchoose4 ALUFN5#32 ALUFN4#32 s[31:0]  shift[31:0] boole[31:0] cmp[31:0]  alu[31:0] mux4
+.ends

@@ -1,0 +1,112 @@
+.include C:\Users\Owner\Downloads\50002\beta.uasm
+.include C:\Users\Owner\Downloads\50002\lab5checkoff.uasm
+
+count_bull_cows: 
+PUSH(LP)
+PUSH(BP)
+MOVE(SP, BP)
+PUSH(R1)		|a
+PUSH(R2)		|b
+PUSH(R3)		|bulls and / atry
+PUSH(R4)		|bulls and / btemp
+PUSH(R5)		|mask
+PUSH(R6)		|compare condition
+PUSH(R7)		|BULLS!
+PUSH(R8)		|for loop counter for bulls and cow 1
+PUSH(R9)		|4
+PUSH(R10)		|compare forloop
+PUSH(R11)		|COWS!
+PUSH(R12)		|for loop counter for cow2
+PUSH(R13)		|btry
+CMOVE(4,R9)	|initialize constant 4
+CMOVE(0xF,R5)	|initialize mask
+CMOVE(0,R7)	|initialize bull count
+CMOVE(0,R8)	|initialize bull loop
+
+LD(BP,-12,R1)	|load args
+LD(BP,-16,R2)	|load args
+BR(end_bulls)	|branch to check for
+
+count_bulls:		|countbulls main statement
+ADDC(R8,1,R8)	|add 1 per loop
+AND(R1,R5,R3)	|and bulls with mask	
+AND(R2,R5,R4)	|and bulls with mask
+CMPEQ(R3,R4,R6)	|checking if
+BNE(R6,if_bulls)	|branch to if
+SHL(R5,R9,R5)	|shift mask
+BR(end_bulls)	|branch to check for
+
+if_bulls:		|if statement
+ADDC(R7,1,R7) 	|add bulls
+OR(R1,R5,R1)	|or and store them
+OR(R2,R5,R2)	|or and store them
+SHL(R5,R9,R5)	|shift mask
+
+end_bulls:		|checking for loop
+CMPLT(R8,R9,R10)	|compare and store to R10
+BNE(R10,count_bulls)	|branch to main body
+
+CMOVE(0, R11)	|initialize cow count
+CMOVE(0,R8)	|initialize for cow outer loop
+BR(end_cows_out)	|branch to check out
+
+count_cows_out:	|cow outer loop
+ADDC(R8,1,R8)	|add 1 per loop
+CMOVE(0xF,R0)
+AND(R1,R0,R3)	|creating atry
+SHR(R1,R9,R1)	|shift a right
+CMPEQC(R3,0xF,R6)	|checking if
+
+BEQ(R6,if_cow_1)	|branch to if
+BR(end_cows_out)	|branch to outer check
+
+if_cow_1:		|if statement 1
+CMOVE(0,R12)	|initialize for inner cow loop
+MOVE(R2,R4)	|copy R2
+CMOVE(0xF,R5)	|initialize mask
+BR(end_cows_in)	|branch to inner check
+
+count_cows_in:	|cow inner loop
+ADDC(R12,1,R12)	|add 1 per loop
+AND(R4,R0,R13)	|making btry
+SHR(R4,R9,R4)	|shifting btemp
+CMPEQ(R3,R13,R6)	|checking if,cmp atry and btry
+BNE(R6,if_cow_2)	|branch to if
+SHL(R5,R9,R5)	|shift mask
+BR(end_cows_in)	|branch to end
+
+if_cow_2:		|if statement 2
+ADDC(R11,1,R11)	|add cows
+OR(R2,R5,R2)	|or B
+
+BR(end_cows_out)
+
+end_cows_in:		|checking inner for loop
+CMPLT(R12,R9,R10)	|compare and store to R10
+BNE(R10,count_cows_in)	|branch to main body
+
+end_cows_out:	|checking outer for loop
+CMPLT(R8,R9,R10)	|compare and store to R10
+BNE(R10,count_cows_out)	|branch to main body
+
+SHL(R7,R9,R7)
+ADD(R7,R11,R0)
+POP(R13)
+POP(R12)
+POP(R11)
+POP(R10)
+POP(R9)
+POP(R8)
+POP(R7)
+POP(R6)
+POP(R5)
+POP(R4)
+POP(R3)
+POP(R2)
+POP(R1)
+MOVE(BP,SP) 	|standard subroutine exit sequence
+POP(BP)
+POP(LP)
+RTN()
+StackBase: LONG(.+4)	| Pointer to bottom of stack
+. = .+0x1000		| Reserve space for stack...

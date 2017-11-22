@@ -1,0 +1,14 @@
+.include "C:/Users/Owner/Downloads/50002/nominal.jsim"
+.include "C:/Users/Owner/Downloads/50002/lab1checkoff.jsim"
+
+
+.subckt F A B C vout2 
+MPD1 z c vdd vdd PENH sw=8 sl=1
+MPD2 vout1 a z vdd PENH sw=8 sl=1
+MPD3 vout1 b z vdd PENH sw =8 sl=1
+MPD4 vout1 c 0 0 NENH sw=8 sl=1
+MPD5 vout1 a y 0 NENH sw=8 sl=1
+MPD6 y b 0 0 NENH sw=8 sl=1
+MPD7 vout2 vout1 vdd vdd PENH sw=8 sl=1  
+MPD8 vout2 vout1 0 0 NENH sw=8 sl=1
+.ends

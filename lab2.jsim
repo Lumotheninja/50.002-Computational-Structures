@@ -1,0 +1,18 @@
+.include "C:/Users/Owner/Downloads/50002/nominal.jsim"
+.include "C:/Users/Owner/Downloads/50002/stdcell.jsim"
+.include "C:/Users/Owner/Downloads/50002/lab2checkoff.jsim"
+
+.subckt FA a b cin s cout
+Xid a b out1 xor2
+Xid2 out1 cin s xor2
+Xid3 a b out2 and2
+Xid4 out1 cin out3 and2
+Xid5 out2 out3 cout or2
+.ends
+
+.subckt ADDER4 a3 a2 a1 a0 b3 b2 b1 b0 s4 s3 s2 s1 s0
+Xbit0 a0 b0 0 s0 c0 FA 
+Xbit1 a1 b1 c0 s1 c1 FA 
+Xbit2 a2 b2 c1 s2 c2 FA 
+Xbit3 a3 b3 c2 s3 s4 FA 
+.ends

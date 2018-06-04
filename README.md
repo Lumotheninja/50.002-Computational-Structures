@@ -26,4 +26,4 @@ C code that implements bulls and cows, or Mastermind\
 _Lab 6_\
 JSim simulation of a Beta CPU\
 \
-I miseds 2 labs, an optional lab 7 and dropped lab 8, which are C programs
+I missed 2 labs, an optional lab 7 and dropped lab 8, which are C programs

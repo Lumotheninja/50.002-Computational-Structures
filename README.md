@@ -18,7 +18,7 @@ _Lab 3_\
 JSim arithmetic logic unit (ALU)\
 \
 _Lab 4_\
-Lab 4 is an optional lab, a simulation of a Turing machine that matches parenthesis
+Lab 4 is an optional lab, a simulation of a Turing machine that matches parenthesis\
 \
 _Lab 5_\
 C code that implements bulls and cows, or Mastermind\
@@ -26,4 +26,4 @@ C code that implements bulls and cows, or Mastermind\
 _Lab 6_\
 JSim simulation of a Beta CPU\
 \
-I miss 2 labs, an optional lab 7 and lab 8, which is C code is Trap handling
+I miseds 2 labs, an optional lab 7 and dropped lab 8, which are C programs
